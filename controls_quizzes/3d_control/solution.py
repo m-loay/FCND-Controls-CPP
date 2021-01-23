@@ -90,22 +90,22 @@ class UDACITYDroneIn3D:
     # Reactive moments 1 through 4
     @property
     def tau_1(self):
-        tau = -self.k_m * self.omega[0]**2
+        tau = self.k_m * self.omega[0]**2
         return tau
         
     @property
     def tau_2(self):
-        tau = self.k_m * self.omega[1]**2
+        tau = -self.k_m * self.omega[1]**2
         return tau
 
     @property
     def tau_3(self):
-        tau = -self.k_m * self.omega[2]**2
+        tau = self.k_m * self.omega[2]**2
         return tau
 
     @property
     def tau_4(self):
-        tau = self.k_m * self.omega[3]**2
+        tau = -self.k_m * self.omega[3]**2
         return tau
 
     @property

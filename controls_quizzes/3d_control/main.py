@@ -117,7 +117,6 @@ angular_vel_history = drone.get_euler_derivatives()
 # executing the flight
 for i in range(0,z_path.shape[0]):
     
-    print("i=%d"%(i))
     rot_mat = drone.R()
 
     c = control_system.altitude_controller(z_path[i],
@@ -140,8 +139,6 @@ for i in range(0,z_path.shape[0]):
                                                      c) 
     
     for j in range(inner_loop_relative_to_outer_loop):
-        
-        print("j=%d"%(j))
         rot_mat = drone.R()
         
         angular_vel = drone.get_euler_derivatives()
@@ -172,7 +169,7 @@ for i in range(0,z_path.shape[0]):
 
 fig = plt.figure()
 ax = fig.gca(projection='3d')
-# ax.plot(x_path, y_path, z_path,linestyle='-',marker='.',color='red')
+ax.plot(x_path, y_path, z_path,linestyle='-',marker='.',color='red')
 ax.plot(drone_state_history[:,0],
          drone_state_history[:,1],
          drone_state_history[:,2],
@@ -216,4 +213,36 @@ ax.set_ylabel('$y$ [$m$]').set_fontsize(20)
 ax.set_zlabel('$z$ [$m$]').set_fontsize(20)
 plt.legend(['Planned yaw','Executed yaw'],fontsize = 14)
 
+plt.show()
+
+plt.plot(t,-omega_history[:-1,0],color='blue')
+plt.plot(t,omega_history[:-1,1],color='red')
+plt.plot(t,-omega_history[:-1,2],color='green')
+plt.plot(t,omega_history[:-1,3],color='black')
+
+plt.title('Angular velocities').set_fontsize(20)
+plt.xlabel('$t$ [$s$]').set_fontsize(20)
+plt.ylabel('$\omega$ [$rad/s$]').set_fontsize(20)
+plt.legend(['P 1','P 2','P 3','P 4' ],fontsize = 14)
+
+plt.grid()
+plt.show()
+
+err= np.sqrt((x_path-drone_state_history[:-1,0])**2 
+             +(y_path-drone_state_history[:-1,1])**2 
+             +(y_path-drone_state_history[:-1,2])**2)
+
+
+plt.plot(t,err)
+plt.title('Error in flight position').set_fontsize(20)
+plt.xlabel('$t$ [$s$]').set_fontsize(20)
+plt.ylabel('$e$ [$m$]').set_fontsize(20)
+plt.show()
+
+plt.plot(t,psi_path,marker='.')
+plt.plot(t,drone_state_history[:-1,5])
+plt.title('Yaw angle').set_fontsize(20)
+plt.xlabel('$t$ [$s$]').set_fontsize(20)
+plt.ylabel('$\psi$ [$rad$]').set_fontsize(20)
+plt.legend(['Planned yaw','Executed yaw'],fontsize = 14)
 plt.show()
