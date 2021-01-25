@@ -16,6 +16,7 @@ class Drone2D:
         self.u2 = 0.0
         self.g = 9.81
         
+         # z, y, phi, z_dot, y_dot, phi_dot
         self.X = np.array([0.0,0.0,0.0,0.0,0.0,0.0])
     
     @property
