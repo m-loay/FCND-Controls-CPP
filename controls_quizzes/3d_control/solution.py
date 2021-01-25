@@ -90,22 +90,22 @@ class UDACITYDroneIn3D:
     # Reactive moments 1 through 4
     @property
     def tau_1(self):
-        tau = self.k_m * self.omega[0]**2
+        tau = -self.k_m * self.omega[0]**2
         return tau
         
     @property
     def tau_2(self):
-        tau = -self.k_m * self.omega[1]**2
+        tau = self.k_m * self.omega[1]**2
         return tau
 
     @property
     def tau_3(self):
-        tau = self.k_m * self.omega[2]**2
+        tau = -self.k_m * self.omega[2]**2
         return tau
 
     @property
     def tau_4(self):
-        tau = -self.k_m * self.omega[3]**2
+        tau = self.k_m * self.omega[3]**2
         return tau
 
     @property
@@ -128,21 +128,14 @@ class UDACITYDroneIn3D:
                                         u_bar_p,
                                         u_bar_q,
                                         u_bar_r):
-
         c_bar = -c * self.m / self.k_f
         p_bar = u_bar_p * self.i_x / (self.k_f * self.l)
         q_bar = u_bar_q * self.i_y / (self.k_f * self.l)
-        r_bar = u_bar_r * self.i_z / self.k_m 
-
-        omega_4 = (c_bar + p_bar - r_bar - q_bar)/4
-        omega_3 = (r_bar - p_bar)/2 + omega_4
-        omega_2 = (c_bar - p_bar)/2 - omega_3
-        omega_1 = c_bar - omega_2 - omega_3 - omega_4
-        
-        self.omega[0] = -np.sqrt(omega_1)
-        self.omega[1] = np.sqrt(omega_2)
-        self.omega[2] = -np.sqrt(omega_3)
-        self.omega[3] = np.sqrt(omega_4)
+        r_bar = u_bar_r * self.i_z / self.k_m                                        
+        self.omega[0] = -np.sqrt((c_bar + p_bar + q_bar + r_bar) / 4.0)
+        self.omega[1] = np.sqrt((c_bar - p_bar + q_bar - r_bar) / 4.0)
+        self.omega[2] = -np.sqrt((c_bar - p_bar - q_bar + r_bar) / 4.0)
+        self.omega[3] = np.sqrt((c_bar + p_bar - q_bar - r_bar) / 4.0)
 
     def R(self):
         r_x = np.array([[1, 0, 0],
